@@ -1,0 +1,25 @@
+{
+    "name": "creode/marketing-signup-metacube",
+    "description": "Library which uses the creode marketing signup interfaces to create metacube specific integration.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "John Cook",
+            "email": "john.cook@creode.co.uk"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../marketing-signup"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "creode/marketing-signup": "@dev",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {"Creode\\MarketingSignupMetacube\\": "src/"}
+    }
+}
