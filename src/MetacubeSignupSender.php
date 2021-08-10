@@ -23,16 +23,8 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
   public function send($request_type, $endpoint, $data, $operations = []) {
     $this->validateAuth();
 
-    // Testing stack
-    $container = [];
-    $history = Middleware::history($container);
-    $stack = HandlerStack::create();
-    $stack->push($history);
-
     $client = new Client([
-      'handler' => $stack,
-      'base_uri' => 'https://mcjfdlnbpvs8lj6lfcg3yssbczhy.rest.marketingcloudapis.com',
-//      'base_uri' => 'https://example.com',
+      'base_uri' => $this->api_arguments['base_uri'],
       'headers' => [
         'Content-Type' => 'application/json',
         'Authorization' => 'Bearer ' . $this->accessToken,
@@ -41,7 +33,8 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 
     try {
       $response = $client->request(
-        $request_type, $endpoint, /*$endpoint,*/
+        $request_type,
+        $endpoint,
         [
           RequestOptions::JSON => $data,
           'debug' => TRUE,
@@ -68,10 +61,6 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 	    }
     }
 
-    foreach ($container as $transaction) {
-      echo (string) $transaction['request']->getBody();
-    }
-
     return json_decode(
       $response->getBody()->getContents(),
       TRUE
@@ -88,7 +77,7 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 
   protected function authenticate() {
     $client = new Client([
-      'base_uri' => 'https://mcjfdlnbpvs8lj6lfcg3yssbczhy.auth.marketingcloudapis.com',
+      'base_uri' => $this->api_arguments['base_uri'],
       'headers' => [
         'Content-Type' => 'application/json',
       ],
