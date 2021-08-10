@@ -8,12 +8,6 @@
             "email": "john.cook@creode.co.uk"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../marketing-signup"
-        }
-    ],
     "require": {
         "ext-json": "*",
         "creode/marketing-signup": "@dev",
