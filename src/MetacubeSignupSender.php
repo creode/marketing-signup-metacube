@@ -2,11 +2,15 @@
 
 namespace Creode\MarketingSignupMetacube;
 
+use Creode\MarketingSignup\AuthenticationException;
+use Creode\MarketingSignup\DuplicateKeyException;
+use Creode\MarketingSignup\InvalidArgumentException;
 use Creode\MarketingSignup\MarketingSignupSenderBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 
 class MetacubeSignupSender extends MarketingSignupSenderBase
@@ -45,7 +49,23 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
       );
     }
     catch (ClientException $e) {
-      echo $e->getResponse()->getBody()->getContents();
+    	$exceptionBody = json_decode(
+    		$e->getResponse()->getBody()->getContents(),
+		    TRUE
+	    );
+    	switch ($e->getResponse()->getStatusCode()) {
+		    case 400:
+		    	if ($exceptionBody['message'] === 'The event data contains duplicate value for an existing primary key. Please correct the event data and try again.') {
+		    		throw new DuplicateKeyException($exceptionBody['message']);
+			    }
+		    	throw new InvalidArgumentException($exceptionBody['message']);
+
+		    case 401:
+		    	throw new AuthenticationException($exceptionBody['message']);
+
+		    default:
+		    	throw $e;
+	    }
     }
 
     foreach ($container as $transaction) {
