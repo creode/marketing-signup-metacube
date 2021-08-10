@@ -33,7 +33,8 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 
     try {
       $response = $client->request(
-        $request_type, $endpoint, /*$endpoint,*/
+        $request_type,
+        $endpoint,
         [
           RequestOptions::JSON => $data,
           'debug' => TRUE,
@@ -76,7 +77,7 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 
   protected function authenticate() {
     $client = new Client([
-      'base_uri' => 'https://mcjfdlnbpvs8lj6lfcg3yssbczhy.auth.marketingcloudapis.com',
+      'base_uri' => $this->api_arguments['base_uri'],
       'headers' => [
         'Content-Type' => 'application/json',
       ],

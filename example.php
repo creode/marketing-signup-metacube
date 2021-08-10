@@ -23,6 +23,7 @@ $signup = new MetacubeSignup(
   [
     'client_id' => '<MY_CLIENT_ID>',
     'client_secret' => '<MY_CLIENT_SECRET>',
+    'base_uri' => '<API_BASE_URI>',
   ],
   $event_definition_key
 );
