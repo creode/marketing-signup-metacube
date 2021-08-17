@@ -8,6 +8,7 @@ use Creode\MarketingSignup\InvalidArgumentException;
 use Creode\MarketingSignup\MarketingSignupSenderBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
@@ -23,8 +24,10 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
   public function send($request_type, $endpoint, $data, $operations = []) {
     $this->validateAuth();
 
+    $baseUri = str_replace('.auth.', '.rest.', $this->api_arguments['base_uri']);
+
     $client = new Client([
-      'base_uri' => $this->api_arguments['base_uri'],
+      'base_uri' => $baseUri,
       'headers' => [
         'Content-Type' => 'application/json',
         'Authorization' => 'Bearer ' . $this->accessToken,
@@ -59,6 +62,9 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
 		    default:
 		    	throw $e;
 	    }
+    }
+    catch (ServerException $e) {
+    	throw $e;
     }
 
     return json_decode(
