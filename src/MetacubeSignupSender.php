@@ -40,7 +40,7 @@ class MetacubeSignupSender extends MarketingSignupSenderBase
         $endpoint,
         [
           RequestOptions::JSON => $data,
-          'debug' => TRUE,
+          'debug' => ( defined( 'MARKETING_SIGN_UP_METACUBE_DEBUG' ) && MARKETING_SIGN_UP_METACUBE_DEBUG ),
         ]
       );
     }
