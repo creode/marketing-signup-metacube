@@ -4,11 +4,14 @@ namespace Creode\MarketingSignupMetacube;
 
 use Creode\MarketingSignup\MarketingSignupTypeBase;
 
-class MetacubeSignup extends MarketingSignupTypeBase
-{
-
-	public function constructSender($api_arguments = []) {
-		return new MetacubeSignupSender($api_arguments);
+class MetacubeSignup extends MarketingSignupTypeBase {
+	/**
+	 * Constructs the sender object.
+	 *
+	 * @param array $api_arguments Array of arguments for the API.
+	 */
+	public function constructSender( $api_arguments = array() ) {
+		return new MetacubeSignupSender( $api_arguments );
 	}
 
 	/**
@@ -22,45 +25,42 @@ class MetacubeSignup extends MarketingSignupTypeBase
 	 * @inheritdoc
 	 */
 	protected function requiredFieldKeys() {
-		return [
-			'Email_Address'
-		];
+		return array(
+			'EmailAddress',
+		);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	protected function optionalFieldKeys() {
-		return [
-			"First_Name",
-			"Last_Name",
-			"Email_Address",
-			"Opt_In_Competition",
-			"Source",
-			"Country",
-			"Opt_In_Time",
-			"I agree to receive occasional emails from Sipsmith",
-			"Date_of_Birth",
-			"Opt_In_TC_PP",
-			'State_Province',
-			"City",
-			"Postal_Code",
-		];
+		return array(
+			'FirstName',
+			'LastName',
+			'EmailAddress',
+			'Country',
+			'StateProvince',
+			'City',
+			'PostalCode',
+			'Birthdate',
+			'OptInLegal',
+			'OptInMarketing',
+		);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function add($extra_data = []) {
-		if (!$this->list_id) {
+	public function add( $extra_data = [] ) {
+		if ( ! $this->list_id ) {
 			throw new \Exception(
-				'No List identifier provided for mailchimp. Please add `list_id` property with a valid list id.'
+				'No Event provided for Metacube. Please add `event` property with a valid id.'
 			);
 		}
 
-		if (!$this->validate()) {
+		if ( ! $this->validate() ) {
 			throw new \Exception(
-				'Required fields for this API are either missing or in the wrong format. Please check them in the MailChimp Documentation.'
+				'Required fields for this API are either missing or in the wrong format. Please check them in the MetaCube Documentation.'
 			);
 		}
 
@@ -68,7 +68,7 @@ class MetacubeSignup extends MarketingSignupTypeBase
 			'POST',
 			"/interaction/v1/events",
 			[
-				'ContactKey' => $this->data['Email_Address'],
+				'ContactKey' => $this->data['EmailAddress'],
 				'EventDefinitionKey' => $this->list_id,
 				'Data' => $this->data,
 			]
