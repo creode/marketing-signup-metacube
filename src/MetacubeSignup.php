@@ -45,6 +45,7 @@ class MetacubeSignup extends MarketingSignupTypeBase {
 			'Birthdate',
 			'OptInLegal',
 			'OptInMarketing',
+			'Source',
 		);
 	}
 
